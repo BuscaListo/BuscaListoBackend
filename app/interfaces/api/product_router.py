@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from app.application.dto.producto_dto import (
     ProductResponseDTO,
+    RecentProductResponseDTO,
     ProductCreateDTO,
     ProductUpdateDTO,
 )
@@ -58,7 +59,7 @@ def delete_product(product_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Producto no encontrado")
     return None
 
-@router.get("/top/recientes", response_model=List[ProductResponseDTO])
+@router.get("/top/recientes", response_model=List[RecentProductResponseDTO])
 def get_top3_recent_products(db: Session = Depends(get_db)):
     productos = get_top3_recent_products_use_case(db)
-    return [ProductResponseDTO.model_validate(p) for p in productos]
+    return [RecentProductResponseDTO.model_validate(p) for p in productos]

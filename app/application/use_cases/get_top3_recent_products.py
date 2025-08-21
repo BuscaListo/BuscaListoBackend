@@ -1,49 +1,60 @@
 from typing import List
 from sqlalchemy.orm import Session
-from sqlalchemy.orm import joinedload
-
+from sqlalchemy import func
 
 from app.domain.models.product import Product
-from app.domain.models.image import Image
 from app.infrastructure.db.models.product_model import ProductORM
 from app.infrastructure.db.models.image import ImageORM
+from app.infrastructure.db.models.marcas_model import MarcaORM
+from app.infrastructure.db.models.subcategorias_model import SubCategoriaORM
 
 
 def get_top3_recent_products_use_case(db: Session) -> List[Product]:
+    # Subconsulta para elegir una única imagen por producto (la de menor id)
+    image_per_product_subq = (
+        db.query(
+            ImageORM.id_producto.label("id_producto"),
+            func.min(ImageORM.id).label("min_image_id"),
+        )
+        .group_by(ImageORM.id_producto)
+        .subquery()
+    )
 
-    # Subconsulta para obtener una imagen por producto
-    productos_orm = (
-        db.query(ProductORM, ImageORM)
-        .join(ImageORM, ImageORM.id_producto == ProductORM.id)
-        .distinct(ProductORM.id)  # Para evitar duplicados de productos
+    # Consulta optimizada con joins necesarios y límite de 3 productos más recientes
+    rows = (
+        db.query(
+            ProductORM,
+            MarcaORM.nombre.label("brand_name"),
+            SubCategoriaORM.nombre.label("subcategory_name"),
+            ImageORM.url.label("image_url"),
+        )
+        .join(MarcaORM, MarcaORM.id == ProductORM.id_marca)
+        .join(SubCategoriaORM, SubCategoriaORM.id == ProductORM.id_sub_categoria)
+        .outerjoin(image_per_product_subq, image_per_product_subq.c.id_producto == ProductORM.id)
+        .outerjoin(ImageORM, ImageORM.id == image_per_product_subq.c.min_image_id)
+        .order_by(ProductORM.creado.desc())
+        .limit(3)
         .all()
     )
 
     productos: List[Product] = []
-    for p in productos_orm:
-
-        # Objeto de la imagen
-        i = p[1]
-
-        # Objeto de producto
-        p = p[0]
-
+    for producto_orm, brand_name, subcategory_name, image_url in rows:
         productos.append(
             Product(
-                id=p.id,
-                name=p.nombre,
-                brand=p.id_marca,
-                price=p.precio_bs,
-                category=p.sub_categoria.nombre,
-                stock=p.in_stock,
+                id=producto_orm.id,
+                name=producto_orm.nombre,
+                brand=brand_name,  # ahora nombre de marca
+                price=producto_orm.precio_bs,
+                category=subcategory_name,
+                stock=producto_orm.in_stock,
                 offerDescription="",
-                supplier=p.id_sucursal,
-                availableOnline=p.activo,
-                views=p.views if p.views else 0,
-                creado=p.creado,
-                precio_dls=p.precio_dls if p.precio_dls else None,
-                activo=p.activo,
-                imageUrl=i.url if i else None,
+                supplier=producto_orm.id_sucursal,
+                availableOnline=producto_orm.activo,
+                views=producto_orm.views if producto_orm.views else 0,
+                creado=producto_orm.creado,
+                precio_dls=producto_orm.precio_dls if producto_orm.precio_dls else None,
+                activo=producto_orm.activo,
+                imageUrl=image_url,
             )
         )
     return productos
