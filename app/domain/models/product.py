@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
+
 @dataclass
 class Product:
     id: int
@@ -17,4 +18,4 @@ class Product:
     views: int
     activo: bool
     creado: datetime
-    image: Optional[str]
+    imageUrl: Optional[str]

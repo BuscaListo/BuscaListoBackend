@@ -15,7 +15,7 @@ class ProductResponseDTO(BaseModel):
     supplier: Optional[int]
     availableOnline: bool
     views: int
-    image: Optional[str]
+    imageUrl: Optional[str]
     creado: datetime
 
     class Config:

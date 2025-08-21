@@ -43,7 +43,7 @@ def get_top3_recent_products_use_case(db: Session) -> List[Product]:
                 creado=p.creado,
                 precio_dls=p.precio_dls if p.precio_dls else None,
                 activo=p.activo,
-                image=i.url if i else None,
+                imageUrl=i.url if i else None,
             )
         )
     return productos
