@@ -17,8 +17,8 @@ def create_product_use_case(db: Session, product_data: ProductCreateDTO) -> Prod
         id_sub_categoria=product_data.id_sub_categoria,
         id_sucursal=product_data.id_sucursal,
         id_marca=product_data.id_marca,
-        creado=product_data.creado or datetime.utcnow(),
-        creado_por=None,
+        creado=datetime.utcnow(),
+        creado_por=product_data.creado_por,
         caracteristicas=product_data.caracteristicas,
         caracteristicas_avanzada=product_data.caracteristicas_avanzada,
     )
@@ -40,6 +40,7 @@ def create_product_use_case(db: Session, product_data: ProductCreateDTO) -> Prod
         availableOnline=nuevo_producto.activo,
         views=nuevo_producto.views if nuevo_producto.views else 0,
         creado=nuevo_producto.creado,
+        creado_por=nuevo_producto.creado_por,
         precio_dls=nuevo_producto.precio_dls if nuevo_producto.precio_dls else None,
         activo=nuevo_producto.activo,
     )

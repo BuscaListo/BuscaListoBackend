@@ -16,6 +16,7 @@ class ProductResponseDTO(BaseModel):
     availableOnline: bool
     views: int
     creado: datetime
+    creado_por: Optional[str]
 
     class Config:
         from_attributes = True
@@ -32,7 +33,7 @@ class ProductCreateDTO(BaseModel):
     id_sub_categoria: int
     id_sucursal: int
     id_marca: int
-    creado: Optional[datetime] = None
+    creado_por: Optional[str] = None
     caracteristicas: Optional[str] = None
     caracteristicas_avanzada: Optional[str] = None
 
