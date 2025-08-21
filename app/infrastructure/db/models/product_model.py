@@ -4,6 +4,7 @@ from app.infrastructure.base import Base
 from app.infrastructure.db.models.subcategorias_model import SubCategoriaORM
 from app.infrastructure.db.models.marcas_model import MarcaORM
 from app.infrastructure.db.models.sucursales_model import SucursalORM
+# from app.infrastructure.db.models.image import ImageORM
 
 class ProductORM(Base):
     __tablename__ = "producto"
@@ -27,3 +28,4 @@ class ProductORM(Base):
     caracteristicas_avanzada = Column(Text)
 
     sub_categoria = relationship("SubCategoriaORM", back_populates="productos")
+    imagenes = relationship("ImageORM", back_populates="producto")

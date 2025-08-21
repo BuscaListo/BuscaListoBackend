@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 
+
 class ProductResponseDTO(BaseModel):
     id: int
     name: str
@@ -9,14 +10,12 @@ class ProductResponseDTO(BaseModel):
     price: float
     category: str
     precio_dls: Optional[float]
-    imageUrl: Optional[str]
     stock: Optional[int]
     offerDescription: Optional[str]
     supplier: Optional[int]
     availableOnline: bool
     views: int
     creado: datetime
-    creado_por: Optional[str]
 
     class Config:
         from_attributes = True

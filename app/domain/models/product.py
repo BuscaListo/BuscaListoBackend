@@ -10,7 +10,6 @@ class Product:
     price: float
     category: str
     precio_dls: Optional[float]
-    imageUrl: Optional[str]
     stock: bool
     offerDescription: Optional[str]
     supplier: Optional[int]
@@ -18,4 +17,4 @@ class Product:
     views: int
     activo: bool
     creado: datetime
-    creado_por: Optional[str]
+    image: Optional[str]
