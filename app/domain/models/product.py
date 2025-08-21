@@ -18,3 +18,4 @@ class Product:
     views: int
     activo: bool
     creado: datetime
+    creado_por: Optional[str]
