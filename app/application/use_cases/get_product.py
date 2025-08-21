@@ -1,3 +1,4 @@
+from math import prod
 from sqlalchemy.orm import Session
 from app.domain.models.product import Product
 from app.infrastructure.db.models.product_model import ProductORM
@@ -12,13 +13,14 @@ def get_product_use_case(db: Session, product_id: int) -> Product:
         name=producto_orm.nombre,
         brand=producto_orm.id_marca,
         price=producto_orm.precio_bs,
-        subcategory=producto_orm.id_sub_categoria,
+        category=producto_orm.sub_categoria.nombre,
         imageUrl=producto_orm.imagenes,
         stock=producto_orm.in_stock,
         offerDescription="",
-        requirePrescription=False,
-        supplier="",
+        supplier=producto_orm.id_sucursal,
         availableOnline=producto_orm.activo,
-        views=0,
-        creado=producto_orm.creado
+        views=producto_orm.views if producto_orm.views else 0,
+        creado=producto_orm.creado,
+        precio_dls=producto_orm.precio_dls if producto_orm.precio_dls else None,
+        activo=producto_orm.activo
     )

@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 from app.infrastructure.base import Base
-
-
 class SubCategoriaORM(Base):
     __tablename__ = "subcategorias"
 
@@ -13,3 +12,4 @@ class SubCategoriaORM(Base):
     creado_por = Column(String(255))
     activo = Column(Boolean, default=True)
 
+    productos = relationship("ProductORM", back_populates="sub_categoria")

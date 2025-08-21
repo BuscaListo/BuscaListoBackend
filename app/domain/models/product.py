@@ -8,16 +8,13 @@ class Product:
     name: str
     brand: int
     price: float
-    # category
-    subcategory: int
-    # precio_dls: Optional[float]
+    category: str
+    precio_dls: Optional[float]
     imageUrl: Optional[str]
     stock: bool
-    # url
     offerDescription: Optional[str]
-    requirePrescription: Optional[bool]
-    supplier: Optional[str]
+    supplier: Optional[int]
     availableOnline: bool
     views: int
-    # activo: bool
+    activo: bool
     creado: datetime

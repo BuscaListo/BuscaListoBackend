@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, Text, Boolean, ForeignKey, DateTime
+from sqlalchemy.orm import relationship
 from app.infrastructure.base import Base
+from app.infrastructure.db.models.subcategorias_model import SubCategoriaORM
 
 class ProductORM(Base):
     __tablename__ = "producto"
@@ -21,3 +23,5 @@ class ProductORM(Base):
     activo = Column(Boolean, default=True)
     caracteristicas = Column(Text)
     caracteristicas_avanzada = Column(Text)
+
+    sub_categoria = relationship("SubCategoriaORM", back_populates="productos")
