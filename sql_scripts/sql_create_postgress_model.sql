@@ -231,6 +231,27 @@ CREATE TABLE ESTADISTICAS_PUBLICIDAD (
   "activo" BOOLEAN DEFAULT TRUE
 );
 
+CREATE TABLE MONEDA (
+  "id" BIGSERIAL PRIMARY KEY,
+  "divisa" VARCHAR(150),
+  "precio_bs" DECIMAL(10,2),
+  "creado" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "creado_por" VARCHAR(255),
+  "activo" BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE IMAGENES (
+  "id" BIGSERIAL PRIMARY KEY,
+  "url" VARCHAR(150),
+  "id_producto" BIGINT,
+  "creado" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "creado_por" VARCHAR(255),
+  "activo" BOOLEAN DEFAULT TRUE
+);
+
+ALTER TABLE IMAGENES ADD CONSTRAINT "fk_imagenes_producto" 
+FOREIGN KEY ("id_producto") REFERENCES Producto ("id");
+
 ALTER TABLE Producto ADD CONSTRAINT "fk_producto_subcategoria" 
 FOREIGN KEY ("id_sub_categoria") REFERENCES SubCategorias ("id");
 
