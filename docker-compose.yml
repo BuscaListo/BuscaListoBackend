@@ -25,5 +25,5 @@ services:
       - NAMEDB=${NAMEDB:-my_database}
       - USERDB=${USERDB:-user}
       - PASSWORDDB=${PASSWORDDB:-changeme}
-      - HOSTDB=${HOSTDB:-localhost}
+      - NAME_SERVICEDB=${NAME_SERVICEDB:-localhost}
       - PORTDB=${PORTDB:-5432}

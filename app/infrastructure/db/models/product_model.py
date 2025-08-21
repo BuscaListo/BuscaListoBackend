@@ -16,6 +16,7 @@ class ProductORM(Base):
     id_sucursal = Column(Integer, ForeignKey("sucursales.id"), nullable=False)
     id_marca = Column(Integer, ForeignKey("marcas.id"), nullable=False)
     creado = Column(DateTime)
+    views = Column(Integer, default=0)
     creado_por = Column(String(250))
     activo = Column(Boolean, default=True)
     caracteristicas = Column(Text)
