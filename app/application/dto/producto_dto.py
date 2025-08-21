@@ -10,12 +10,11 @@ class ProductResponseDTO(BaseModel):
     category: str
     precio_dls: Optional[float]
     imageUrl: Optional[str]
-    stock: bool
+    stock: Optional[int]
     offerDescription: Optional[str]
     supplier: Optional[int]
     availableOnline: bool
     views: int
-    activo: bool
     creado: datetime
 
     class Config:
@@ -29,12 +28,11 @@ class ProductCreateDTO(BaseModel):
     precio_dls: Optional[float] = None
     imagenes: Optional[str] = None
     codigo: Optional[str] = None
-    in_stock: Optional[bool] = None
+    in_stock: Optional[int] = None
     id_sub_categoria: int
     id_sucursal: int
     id_marca: int
     creado: Optional[datetime] = None
-    activo: Optional[bool] = None
     caracteristicas: Optional[str] = None
     caracteristicas_avanzada: Optional[str] = None
 
@@ -51,6 +49,5 @@ class ProductUpdateDTO(BaseModel):
     id_sucursal: Optional[int] = None
     id_marca: Optional[int] = None
     creado: Optional[datetime] = None
-    activo: Optional[bool] = None
     caracteristicas: Optional[str] = None
     caracteristicas_avanzada: Optional[str] = None
