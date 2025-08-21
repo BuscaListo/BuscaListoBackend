@@ -22,6 +22,25 @@ class ProductResponseDTO(BaseModel):
         from_attributes = True
 
 
+class RecentProductResponseDTO(BaseModel):
+    id: int
+    name: str
+    brand: str  # nombre de la marca
+    price: float
+    category: str
+    precio_dls: Optional[float]
+    stock: Optional[int]
+    offerDescription: Optional[str]
+    supplier: Optional[int]
+    availableOnline: bool
+    views: int
+    imageUrl: Optional[str]
+    creado: datetime
+
+    class Config:
+        from_attributes = True
+
+
 class ProductCreateDTO(BaseModel):
     nombre: str
     descripcion: Optional[str] = None
