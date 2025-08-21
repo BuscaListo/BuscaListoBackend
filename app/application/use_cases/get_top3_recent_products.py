@@ -28,6 +28,7 @@ def get_top3_recent_products_use_case(db: Session) -> List[Product]:
                 availableOnline=p.activo,
                 views=p.views if p.views else 0,
                 creado=p.creado,
+                creado_por=p.creado_por,
                 precio_dls=p.precio_dls if p.precio_dls else None,
                 activo=p.activo,
             )
