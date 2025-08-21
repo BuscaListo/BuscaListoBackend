@@ -20,3 +20,37 @@ class ProductResponseDTO(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class ProductCreateDTO(BaseModel):
+    nombre: str
+    descripcion: Optional[str] = None
+    precio_bs: float
+    precio_dls: Optional[float] = None
+    imagenes: Optional[str] = None
+    codigo: Optional[str] = None
+    in_stock: Optional[bool] = None
+    id_sub_categoria: int
+    id_sucursal: int
+    id_marca: int
+    creado: Optional[datetime] = None
+    activo: Optional[bool] = None
+    caracteristicas: Optional[str] = None
+    caracteristicas_avanzada: Optional[str] = None
+
+
+class ProductUpdateDTO(BaseModel):
+    nombre: Optional[str] = None
+    descripcion: Optional[str] = None
+    precio_bs: Optional[float] = None
+    precio_dls: Optional[float] = None
+    imagenes: Optional[str] = None
+    codigo: Optional[str] = None
+    in_stock: Optional[bool] = None
+    id_sub_categoria: Optional[int] = None
+    id_sucursal: Optional[int] = None
+    id_marca: Optional[int] = None
+    creado: Optional[datetime] = None
+    activo: Optional[bool] = None
+    caracteristicas: Optional[str] = None
+    caracteristicas_avanzada: Optional[str] = None
