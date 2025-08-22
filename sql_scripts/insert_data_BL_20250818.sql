@@ -12,8 +12,6 @@ values 	('Medicamentos','[]','anthony'),
 		('Belleza','[]','anthony'),
 		('Ropa','[]','anthony')
 
-select * from categorias
-
 -- Insertar SubCategorias
 --Medicamentos
 INSERT INTO subcategorias (id_categoria, nombre, imagenes, creado_por) VALUES
@@ -87,8 +85,6 @@ INSERT INTO subcategorias (id_categoria, nombre, imagenes, creado_por) VALUES
 ((SELECT id FROM categorias WHERE nombre='Ropa'), 'Ropa interior'     , '[]', 'anthony'),
 ((SELECT id FROM categorias WHERE nombre='Ropa'), 'Accesorios de moda', '[]', 'anthony');
 
-select * from subcategorias
-
 --Insertar Ubicaciones
 INSERT INTO UBICACIONES (nombre, latitud, longitud) VALUES
 ('Tiendas Daka Valera | Electrodomésticos', '9.3207435','-70.6001511'),
@@ -97,21 +93,15 @@ INSERT INTO UBICACIONES (nombre, latitud, longitud) VALUES
 ('Farmatodo Valera, La Plata','9.317902625420613','-70.60319198007946'),
 ('Farmatodo Valera, Centro','9.302348925654796','-70.61860742459686');
 
-select * from ubicaciones
-
 --Insertar Empresas
 INSERT INTO empresa (nombre,telefono,id_ubicacion,logo) VALUES
 ('Farmatodo','+58',3, 'https://www.farmatodo.com.ve/assets/svg/logo-farmatodo-blue.svg'),
 ('Daka','+58',2,'https://tiendasdaka.com/img/logoF.webp');
 
-SELECT * FROM empresa
-
 -- Insertar Usuarios
 INSERT INTO Usuario (nombre, email, password, creado_por) VALUES
 ('Ernesto Flores','ernestoflores@gmail.com','123','anthony'),
 ('Samuel Betacourt','samubeta@gmail.com','123','anthony');
-
-SELECT * FROM USUARIO
 
 --Insertar Sucursales
 INSERT INTO Sucursales (nombre, imagenes, id_empresa, id_ubicacion, id_usuario) VALUES
@@ -121,8 +111,6 @@ INSERT INTO Sucursales (nombre, imagenes, id_empresa, id_ubicacion, id_usuario) 
 ('Farmatodo Centro de Valera', '[]'
 ,1,5,2
 );
-
-select * from sucursales
 
 --Insertar Catalogo de permisos
 INSERT INTO catalogo_permisos (nombre, creado_por) VALUES
@@ -159,8 +147,6 @@ SELECT  2 id_usuario, id id_catalogo_permiso,True read,True write,True delete,Tr
 FROM catalogo_permisos
 where nombre like '%premium%'
 
-select * from permisos_usuarios
-
 --Insertar Marca
 INSERT INTO marcas (nombre, descripcion, imagenes, logo, creado_por) VALUES
 ('Laboratorios Farma', 'Laboratorios Farma', '[]','','anthony'),
@@ -170,9 +156,6 @@ INSERT INTO marcas (nombre, descripcion, imagenes, logo, creado_por) VALUES
 ('Bremen', 'Bremen', '[]','','anthony');
 
 -- Insertar Productos
-select * from subcategorias
-select * from sucursales
-
 INSERT INTO Producto (nombre, descripcion, imagenes, precio_bs,precio_dls,in_stock,id_sub_categoria,id_sucursal,
 id_marca,creado_por,caracteristicas,caracteristicas_avanzada) VALUES
 ('Cetirizina 10 mg','Cetirizina 10 mg Cetral Siegfried Caja x 10 Tabletas',
@@ -199,15 +182,11 @@ VALUES ('Basico',0,'N','N','Limitadas','N','Basico (FQA/Email)','N','anthony'),
 ('Medio',10,'S','Med','Sidebar/Secciones Internas','N','Estandar (48h)','Links Personalizados','anthony'),
 ('Premium',30,'S','Alta','Home+Sidebar+Exclusivas','S','Prioritario (24/7)','Exclusividad en ubicaciones y Campañas Especiales','anthony');
 
-select * from subscripciones
-
 --INSERTAR SUBSCRIPCIONES USUARIO
 
 INSERT INTO subcripcion_usuario (id_subscripcion,id_usuario,creado_por) VALUES
 (1,1,'anthony'),
 (3,2,'anthony');
-
-select * from producto
 
 --Reset index table (Tools)
 --SELECT setval(pg_get_serial_sequence('categorias', 'id'), 1, false);
