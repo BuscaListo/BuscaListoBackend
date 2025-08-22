@@ -1,25 +1,22 @@
--- Insertar Catalogos
-
 -- Insertar categorias
-INSERT INTO categorias (nombre,imagenes,creado_por)
-values 	('Medicamentos','[]','anthony'),
-		('Repuestos','[]','anthony'),
-		('Telefonos','[]','anthony'),
-		('TV','[]','anthony'),
-		('Comida Rapida','[]','anthony'),
-		('Zapatos','[]','anthony'),
-		('Suplementos','[]','anthony'),
-		('Belleza','[]','anthony'),
-		('Ropa','[]','anthony')
+INSERT INTO categorias (nombre, imagenes, creado_por) VALUES
+('Medicamentos','[]','anthony'),
+('Repuestos','[]','anthony'),
+('Telefonos','[]','anthony'),
+('TV','[]','anthony'),
+('Comida Rapida','[]','anthony'),
+('Zapatos','[]','anthony'),
+('Suplementos','[]','anthony'),
+('Belleza','[]','anthony'),
+('Ropa','[]','anthony');
 
--- Insertar SubCategorias
---Medicamentos
+-- Insertar SubCategorias Medicamentos
 INSERT INTO subcategorias (id_categoria, nombre, imagenes, creado_por) VALUES
-((select id from categorias where nombre='Medicamentos'), 'Analgésicos'          ,'[]','anthony'),
-((select id from categorias where nombre='Medicamentos'), 'Antibióticos'         ,'[]', 'anthony'),
-((select id from categorias where nombre='Medicamentos'), 'Antigripales'         ,'[]', 'anthony'),
-((select id from categorias where nombre='Medicamentos'), 'Vitaminas'            ,'[]', 'anthony'),
-((select id from categorias where nombre='Medicamentos'), 'Medicamentos crónicos','[]', 'anthony');
+((SELECT id FROM categorias WHERE nombre='Medicamentos'), 'Analgésicos','[]','anthony'),
+((SELECT id FROM categorias WHERE nombre='Medicamentos'), 'Antibióticos','[]','anthony'),
+((SELECT id FROM categorias WHERE nombre='Medicamentos'), 'Antigripales','[]','anthony'),
+((SELECT id FROM categorias WHERE nombre='Medicamentos'), 'Vitaminas','[]','anthony'),
+((SELECT id FROM categorias WHERE nombre='Medicamentos'), 'Medicamentos crónicos','[]','anthony');
 
 -- Repuestos
 INSERT INTO subcategorias (id_categoria, nombre, imagenes, creado_por) VALUES
@@ -86,7 +83,7 @@ INSERT INTO subcategorias (id_categoria, nombre, imagenes, creado_por) VALUES
 ((SELECT id FROM categorias WHERE nombre='Ropa'), 'Accesorios de moda', '[]', 'anthony');
 
 --Insertar Ubicaciones
-INSERT INTO UBICACIONES (nombre, latitud, longitud) VALUES
+INSERT INTO ubicaciones (nombre, latitud, longitud) VALUES
 ('Tiendas Daka Valera | Electrodomésticos', '9.3207435','-70.6001511'),
 ('Daka Agencia Centro Valencia','10.182419388419223','-68.0020493386298'),
 ('Farmatodo Ccs Carlota','10.500840809426903','-66.83359773062556'),
@@ -104,11 +101,11 @@ INSERT INTO Usuario (nombre, email, password, creado_por) VALUES
 ('Samuel Betacourt','samubeta@gmail.com','123','anthony');
 
 --Insertar Sucursales
-INSERT INTO Sucursales (nombre, imagenes, id_empresa, id_ubicacion, id_usuario) VALUES
+INSERT INTO sucursales (nombre, imagenes, id_empresa, id_ubicacion, id_usuario) VALUES
 ('Tiendas Daka Valera','["https://lh3.googleusercontent.com/p/AF1QipMCJ1SeWEtTumTSrVu6b5hY-TkLMdQmW2wzc8hP=s1360-w1360-h1020-rw","https://lh3.googleusercontent.com/p/AF1QipPpAhNwN0MOP_2ChyzTbGAx9G52RLXfaehSioCq=s1360-w1360-h1020-rw"]'
 ,2,1,1
 ),
-('Farmatodo Centro de Valera', '[]'
+('Farmatodo Centro de Valera','[]'
 ,1,5,2
 );
 
@@ -140,12 +137,12 @@ INSERT INTO catalogo_permisos (nombre, creado_por) VALUES
 INSERT INTO permisos_usuarios (id_usuario,id_catalogo_permiso,read,write,delete,edit,creado_por)
 SELECT  1 id_usuario, id id_catalogo_permiso,True read,True write,True delete,True edit,'anthony' creado_por
 FROM catalogo_permisos
-where nombre like '%basic%'
+where nombre like '%basic%';
 
 INSERT INTO permisos_usuarios (id_usuario,id_catalogo_permiso,read,write,delete,edit,creado_por)
 SELECT  2 id_usuario, id id_catalogo_permiso,True read,True write,True delete,True edit,'anthony' creado_por
 FROM catalogo_permisos
-where nombre like '%premium%'
+where nombre like '%premium%';
 
 --Insertar Marca
 INSERT INTO marcas (nombre, descripcion, imagenes, logo, creado_por) VALUES
@@ -155,26 +152,24 @@ INSERT INTO marcas (nombre, descripcion, imagenes, logo, creado_por) VALUES
 ('Siragon', 'Siragon', '[]','','anthony'),
 ('Bremen', 'Bremen', '[]','','anthony');
 
--- Insertar Productos
-INSERT INTO Producto (nombre, descripcion, imagenes, precio_bs,precio_dls,in_stock,id_sub_categoria,id_sucursal,
-id_marca,creado_por,caracteristicas,caracteristicas_avanzada) VALUES
-('Cetirizina 10 mg','Cetirizina 10 mg Cetral Siegfried Caja x 10 Tabletas',
-'["https://lh3.googleusercontent.com/6WcSk-vyHvlYq2iWh0Rmxpz65QnJMo2QYnb4xLs9s_6qcjPmfO0swWFxcTKWtqR6lfhOeHBTsuYMRyyZVgP4kvznfaFtu9R_JHIUd6J-TJ7voiuw",
-"https://lh3.googleusercontent.com/QMDo6lSz4CHTBXHLuHGpM-2lc1E2S5jwHDLJfJq4GkVBYynsB4MUnsCQ_Qtb39D8luX0WuGoQAN4iGB3x_GSg1tqHRkfVTWTMeRxeHG-OXb46YA",
-"https://lh3.googleusercontent.com/unGGeNxCAafZp-N84PQveoh3lrnHYYpVFQwmk8fwZ66liEBNr2Pxh2vQQiQGdDVGEopsM9hvrVw_l9oe1W8sqTziCBQeY_TsC0p-8AR5nedhkDwicA"]'
-,'223.85','1.6',1,3,2,1,'anthony','["reacciones":"somnolencia, fatiga. Además, en ads.: cefalea, mareo, sequedad de boca, dolor abdominal, faringitis, náuseas y en niños 6 meses-12 años: diarrea, rinitis.","lactancia":"evitar"]',
-'[]'
-)
-
-INSERT INTO Producto (nombre, descripcion, imagenes, precio_bs,precio_dls,in_stock,id_sub_categoria,id_sucursal,
-id_marca,creado_por,caracteristicas,caracteristicas_avanzada) VALUES
-('Vitamina D','Vitamina D Farma D 2000Ui Laboratorios Farma Caja x 30 Tabletas',
-'["https://lh3.googleusercontent.com/jQkeFMDQ9X5eTcvBrWCs4w68cRD9U6PajjXswWBYp7PBTcyxvobvhynzL8mhao30c81cR1yUw6Jt3bpjJDsKiW-FpDRZ9lR8XG8",
-"https://lh3.googleusercontent.com/ul6sDg8l8FQMHXEXiKZgr5wNT8XZkWAyIetre9cyyF8jXsPGyneu_xVuuVuv3COlwguL39I0xbQErIral9s7YOe-sVv3z20wzpKwxjqUUbRBqO8z"
-]'
-,'759.94',null,1,4,2,1,'anthony','["reacciones":"somnolencia, fatiga. Además, en ads.: cefalea, mareo, sequedad de boca, dolor abdominal, faringitis, náuseas y en niños 6 meses-12 años: diarrea, rinitis.","lactancia":"evitar"]',
-'[]'
-)
+-- Insertar producto ejemplo
+INSERT INTO Producto (
+    nombre, descripcion, imagenes, precio_bs, precio_dls, in_stock,
+    id_sub_categoria, id_sucursal, id_marca, creado_por, caracteristicas, caracteristicas_avanzada
+) VALUES (
+    'Cetirizina 10 mg',
+    'Cetirizina 10 mg Central Siegfried Caja x 10 Tabletas',
+    '["https://lh3.googleusercontent.com/..."]',
+    223.85,
+    1.6,
+    1,
+    3, -- id_sub_categoria
+    2, -- id_sucursal
+    1, -- id_marca
+    'anthony',
+    '[{"reacciones":"somnolencia, fatiga"}]',
+    '[]'
+);
 
 --INSERTAR SUBSCRIPCIONES
 INSERT INTO subscripciones (nombre, precio, anuncios, prioridad_listado,ubicaciones,estadisticas,soporte, extras,creado_por)
@@ -183,10 +178,6 @@ VALUES ('Basico',0,'N','N','Limitadas','N','Basico (FQA/Email)','N','anthony'),
 ('Premium',30,'S','Alta','Home+Sidebar+Exclusivas','S','Prioritario (24/7)','Exclusividad en ubicaciones y Campañas Especiales','anthony');
 
 --INSERTAR SUBSCRIPCIONES USUARIO
-
-INSERT INTO subcripcion_usuario (id_subscripcion,id_usuario,creado_por) VALUES
+INSERT INTO subscripcion_usuario (id_subscripcion,id_usuario,creado_por) VALUES
 (1,1,'anthony'),
 (3,2,'anthony');
-
---Reset index table (Tools)
---SELECT setval(pg_get_serial_sequence('categorias', 'id'), 1, false);
