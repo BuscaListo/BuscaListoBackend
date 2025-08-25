@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.infrastructure.db.models.product_model import ProductORM
+from app.infrastructure.db.models import ProductORM
 
 
 def delete_product_use_case(db: Session, product_id: int) -> bool:

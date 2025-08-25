@@ -10,214 +10,251 @@ class BaseFromORM(BaseModel):
         from_attributes = True
 
 
-class ProductoModel(BaseFromORM):
+class ProductModel(BaseFromORM):
     id: int
-    nombre: str
-    descripcion: Optional[str] = None
-    precio_bs: float
-    precio_dls: Optional[float] = None
-    imagenes: Optional[str] = None
-    codigo: Optional[str] = None
-    in_stock: bool
-    id_sub_categoria: int
-    id_sucursal: int
-    id_marca: int
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: bool
-    caracteristicas: Optional[str] = None
-    caracteristicas_avanzada: Optional[str] = None
+    name: str
+    description: Optional[str] = None
+    price_bs: float
+    price_usd: Optional[float] = None
+    images: Optional[str] = None
+    code: Optional[str] = None
+    in_stock: int
+    subcategory_id: int
+    branch_id: int
+    brand_id: int
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: int
+    features: Optional[str] = None
+    advanced_features: Optional[str] = None
 
 
-class CategoriaModel(BaseFromORM):
+class CategoryModel(BaseFromORM):
     id: int
-    nombre: str
-    imagenes: Optional[str] = None
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: bool
+    name: str
+    images: Optional[str] = None
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: bool
 
 
-class SubCategoriaModel(BaseFromORM):
+class SubCategoryModel(BaseFromORM):
     id: int
-    nombre: str
-    imagenes: Optional[str] = None
-    id_categoria: int
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: bool
+    name: str
+    images: Optional[str] = None
+    category_id: int
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: bool
 
 
 class StockModel(BaseFromORM):
     id: int
-    id_producto: int
-    cantidad_total: Optional[int] = None
-    cantidad_vendida: Optional[int] = None
-    cantidad_ofertada: Optional[int] = None
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: bool
+    product_id: int
+    total_quantity: Optional[int] = None
+    sold_quantity: Optional[int] = None
+    offered_quantity: Optional[int] = None
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: bool
 
 
-class MarcaModel(BaseFromORM):
+class BrandModel(BaseFromORM):
     id: int
-    nombre: str
-    descripcion: Optional[str] = None
-    imagenes: Optional[str] = None
+    name: str
+    description: Optional[str] = None
+    images: Optional[str] = None
     logo: Optional[str] = None
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: bool
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: bool
 
 
-class OfertaModel(BaseFromORM):
+class OfferModel(BaseFromORM):
     id: int
-    descripcion: str
-    porcentaje: Optional[Decimal] = None
-    id_producto: Optional[int] = None
-    id_categoria: Optional[int] = None
-    id_sub_categoria: Optional[int] = None
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: bool
+    description: str
+    percentage: Optional[Decimal] = None
+    product_id: Optional[int] = None
+    category_id: Optional[int] = None
+    subcategory_id: Optional[int] = None
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: bool
 
 
-class SucursalModel(BaseFromORM):
+class BranchModel(BaseFromORM):
     id: int
-    nombre: str
-    imagenes: Optional[str] = None
-    id_empresa: int
-    id_ubicacion: int
-    id_usuario: int
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: bool
+    name: str
+    images: Optional[str] = None
+    company_id: int
+    location_id: int
+    user_id: int
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: bool
 
 
-class EmpresaModel(BaseFromORM):
+class CompanyModel(BaseFromORM):
     id: int
-    nombre: str
-    telefono: Optional[str] = None
-    id_ubicacion: int
+    name: str
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    website: Optional[str] = None
     logo: Optional[str] = None
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: bool
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: bool
 
 
-class UbicacionModel(BaseFromORM):
+class LocationModel(BaseFromORM):
     id: int
-    nombre: str
-    latitud: Decimal
-    longitud: Decimal
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: bool
+    address: str
+    city: str
+    state: str
+    country: str
+    postal_code: Optional[str] = None
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: bool
 
 
-class WebServiceLogModel(BaseFromORM):
+class UserModel(BaseFromORM):
     id: int
-    id_web_service: int
-    input: Optional[str] = None
-    error: Optional[str] = None
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
+    username: str
+    email: str
+    full_name: str
+    phone: Optional[str] = None
+    role: str
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: bool
+
+
+class AdvertisementModel(BaseFromORM):
+    id: int
+    title: str
+    description: str
+    image_url: str
+    start_date: date
+    end_date: date
+    active: bool
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+
+
+class SubscriptionModel(BaseFromORM):
+    id: int
+    name: str
+    description: str
+    price: float
+    duration_days: int
+    features: Optional[str] = None
+    active: bool
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+
+
+class UserSubscriptionModel(BaseFromORM):
+    id: int
+    user_id: int
+    subscription_id: int
+    start_date: date
+    end_date: date
+    status: str
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+
+
+class UserPermissionModel(BaseFromORM):
+    id: int
+    user_id: int
+    permission_id: int
+    granted: bool
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: bool
+
+
+class PermissionCatalogModel(BaseFromORM):
+    id: int
+    name: str
+    description: str
+    module: str
+    action: str
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: bool
 
 
 class WebServiceModel(BaseFromORM):
     id: int
-    nombre: Optional[str] = None
-    descripcion: Optional[str] = None
-    url: Optional[str] = None
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: Optional[bool] = True
+    name: str
+    url: str
+    api_key: str
+    description: Optional[str] = None
+    active: bool
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
 
 
-class BitacoraPrecioProductoModel(BaseFromORM):
+class WebServiceLogModel(BaseFromORM):
     id: int
-    id_producto: int
-    precio_actualizado: Optional[Decimal] = None
-    precio_nuevo: Optional[Decimal] = None
-    porcentaje: Optional[Decimal] = None
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
+    web_service_id: int
+    request_data: str
+    response_data: str
+    status_code: int
+    execution_time: float
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
 
 
-class CatalogoPermisosModel(BaseFromORM):
+class PriceHistoryModel(BaseFromORM):
     id: int
-    nombre: Optional[str] = None
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: Optional[bool] = True
+    product_id: int
+    old_price: float
+    new_price: float
+    change_date: datetime
+    reason: Optional[str] = None
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
 
 
-class PermisosUsuariosModel(BaseFromORM):
+class AdStatisticsModel(BaseFromORM):
     id: int
-    id_usuario: Optional[int] = None
-    id_catalogo_permiso: Optional[int] = None
-    read: Optional[bool] = False
-    write: Optional[bool] = False
-    delete: Optional[bool] = False
-    edit: Optional[bool] = False
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: Optional[bool] = True
+    advertisement_id: int
+    views: int
+    clicks: int
+    conversions: int
+    date: date
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: bool
 
 
-class SubscripcionModel(BaseFromORM):
+class ImageModel(BaseFromORM):
     id: int
-    nombre: Optional[str] = None
-    precio: Optional[Decimal] = None
-    anuncios: Optional[str] = None
-    prioridad_listado: Optional[str] = None
-    ubicaciones: Optional[str] = None
-    estadisticas: Optional[str] = None
-    soporte: Optional[str] = None
-    extras: Optional[str] = None
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: Optional[bool] = True
+    url: str
+    alt_text: Optional[str] = None
+    product_id: Optional[int] = None
+    category_id: Optional[int] = None
+    subcategory_id: Optional[int] = None
+    brand_id: Optional[int] = None
+    branch_id: Optional[int] = None
+    company_id: Optional[int] = None
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: bool
 
 
-class SubscripcionUsuarioModel(BaseFromORM):
+class CurrencyModel(BaseFromORM):
     id: int
-    id_subscripcion: int
-    id_usuario: int
-    activo: Optional[bool] = True
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-
-
-class UsuarioModel(BaseFromORM):
-    id: int
-    nombre: Optional[str] = None
-    email: Optional[str] = None
-    password: Optional[str] = None
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: Optional[bool] = True
-
-
-class PublicidadModel(BaseFromORM):
-    id: int
-    id_sucursal: int
-    imagenes_publicidad: Optional[str] = None
-    link_destino: Optional[str] = None
-    prioridad: Optional[int] = None
-    fecha_inicio: Optional[date] = None
-    fecha_fin: Optional[date] = None
-    activo: Optional[bool] = True
-    creado: Optional[datetime] = None
-
-
-class EstadisticasPublicidadModel(BaseFromORM):
-    id: int
-    id_publicidad: Optional[int] = None
-    impresiones: Optional[int] = None
-    clics: Optional[int] = None
-    fecha: Optional[date] = None
-    creado: Optional[datetime] = None
-    creado_por: Optional[str] = None
-    activo: Optional[bool] = True
+    code: str
+    name: str
+    symbol: str
+    exchange_rate: float
+    active: bool
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
 

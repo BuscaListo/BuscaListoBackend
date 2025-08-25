@@ -119,7 +119,8 @@ class SQLiteStrategy(DatabaseStrategy):
                 e, ErrorType.FILE_IO_ERROR, f"Validando ruta SQLite: {db_path}"
             )
             # Fallback a ruta por defecto
-            return "database_sqlite.db"
+            #return "database_sqlite.db"
+            print(f"Error validando ruta SQLite: {e}")
 
     def get_connection_string(self) -> str:
         """Construye la cadena de conexión para SQLite"""

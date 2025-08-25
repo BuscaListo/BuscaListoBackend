@@ -10,12 +10,12 @@ class Product:
     brand: int
     price: float
     category: str
-    precio_dls: Optional[float]
+    price_usd: Optional[float]
     stock: bool
     offerDescription: Optional[str]
     supplier: Optional[int]
     availableOnline: bool
     views: int
-    activo: bool
-    creado: datetime
+    active: bool
+    created_at: datetime
     imageUrl: Optional[str]

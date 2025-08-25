@@ -2,21 +2,17 @@ from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
-from app.domain.models.product import Product
-from app.infrastructure.db.models.product_model import ProductORM
-from app.infrastructure.db.models.image import ImageORM
-from app.infrastructure.db.models.marcas_model import MarcaORM
-from app.infrastructure.db.models.subcategorias_model import SubCategoriaORM
+from app.infrastructure.db.models import ProductORM, ImageORM, BrandORM, SubCategoryORM
 
 
-def get_most_viewed_products_use_case(db: Session) -> List[Product]:
+def get_most_viewed_products_use_case(db: Session) -> List[ProductORM]:
     # Subconsulta para elegir una única imagen por producto (la de menor id)
     image_per_product_subq = (
         db.query(
-            ImageORM.id_producto.label("id_producto"),
+            ImageORM.product_id.label("id_producto"),
             func.min(ImageORM.id).label("min_image_id"),
         )
-        .group_by(ImageORM.id_producto)
+        .group_by(ImageORM.product_id)
         .subquery()
     )
 
@@ -24,12 +20,12 @@ def get_most_viewed_products_use_case(db: Session) -> List[Product]:
     rows = (
         db.query(
             ProductORM,
-            MarcaORM.nombre.label("brand_name"),
-            SubCategoriaORM.nombre.label("subcategory_name"),
+            BrandORM.name.label("brand_name"),
+            SubCategoryORM.name.label("subcategory_name"),
             ImageORM.url.label("image_url"),
         )
-        .join(MarcaORM, MarcaORM.id == ProductORM.id_marca)
-        .join(SubCategoriaORM, SubCategoriaORM.id == ProductORM.id_sub_categoria)
+        .join(BrandORM, BrandORM.id == ProductORM.brand_id)
+        .join(SubCategoryORM, SubCategoryORM.id == ProductORM.subcategory_id)
         .outerjoin(image_per_product_subq, image_per_product_subq.c.id_producto == ProductORM.id)
         .outerjoin(ImageORM, ImageORM.id == image_per_product_subq.c.min_image_id)
         .order_by(ProductORM.views.desc())
@@ -37,24 +33,12 @@ def get_most_viewed_products_use_case(db: Session) -> List[Product]:
         .all()
     )
 
-    productos: List[Product] = []
+    productos: List[ProductORM] = []
     for producto_orm, brand_name, subcategory_name, image_url in rows:
-        productos.append(
-            Product(
-                id=producto_orm.id,
-                name=producto_orm.nombre,
-                brand=brand_name,  # ahora nombre de marca
-                price=producto_orm.precio_bs,
-                category=subcategory_name,
-                stock=producto_orm.in_stock,
-                offerDescription="",
-                supplier=producto_orm.id_sucursal,
-                availableOnline=producto_orm.activo,
-                views=producto_orm.views if producto_orm.views else 0,
-                creado=producto_orm.creado,
-                precio_dls=producto_orm.precio_dls if producto_orm.precio_dls else None,
-                activo=producto_orm.activo,
-                imageUrl=image_url,
-            )
-        )
+        # Asignar valores adicionales al objeto ProductORM
+        producto_orm.brand_name = brand_name
+        producto_orm.subcategory_name = subcategory_name
+        producto_orm.image_url = image_url
+        productos.append(producto_orm)
+    
     return productos
