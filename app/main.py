@@ -4,7 +4,7 @@ import socket
 import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from app.interfaces.api import product_router
+from app.interfaces.api import product_router, bcv_router
 
 PROJECT_NAME = os.getenv("PROJECT_NAME", "My FastAPI Project")
 VERSION = os.getenv("VERSION", "1.0.0")
@@ -46,6 +46,7 @@ async def root(request: Request):
     }
 
 app.include_router(product_router.router)
+app.include_router(bcv_router.router, prefix="/currencies", tags=["currencies"])
 
 if __name__ == "__main__":
     uvicorn.run(
