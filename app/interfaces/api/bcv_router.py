@@ -2,7 +2,7 @@ from fastapi import APIRouter, status, HTTPException
 from sqlmodel import select
 from typing import Dict, Optional, List
 from sqlalchemy.orm import Session
-from .scraper import get_bcv_currency_rates
+from app.application.bcv_process.scraper import get_bcv_currency_rates
 from app.infrastructure.db.models.type_change import TypeChange
 from app.application.bcv_process.scraper import get_bcv_currency_rates
 
