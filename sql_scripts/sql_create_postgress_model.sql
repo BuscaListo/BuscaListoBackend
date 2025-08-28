@@ -168,7 +168,7 @@ CREATE TABLE subscripciones (
 
 CREATE TABLE imagenes (
   id BIGSERIAL PRIMARY KEY,
-  url VARCHAR(150),
+  url VARCHAR(250),
   id_producto BIGINT,
   creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   creado_por VARCHAR(255),
@@ -245,6 +245,7 @@ ALTER TABLE estadisticas_publicidad ADD CONSTRAINT fk_estadisticas_publicidad FO
 ALTER TABLE producto ADD COLUMN caracteristicas TEXT NULL;
 ALTER TABLE producto ADD COLUMN caracteristicas_avanzada TEXT NULL;
 ALTER TABLE producto ADD COLUMN views INT NULL;
+ALTER TABLE producto ADD COLUMN url_supplier varchar(250) NULL;
 ALTER TABLE subscripcion_usuario ADD COLUMN creado_por VARCHAR(250) NULL;
 
 -- Modificaciones columnas

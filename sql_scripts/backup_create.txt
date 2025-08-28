@@ -1,0 +1,11 @@
+# Crear respaldo:
+
+pg_dump -h 0.tcp.sa.ngrok.io -p 13329 -U buscalisto -d "bl-global" -F c -b -v -f backup_bl_global.dump
+
+NOTA: PARA QUE NO PIDA PASSWD, antes de ejecutar comando pg_dump, crear variable de sistema set PGPASSWORD=tu_password
+
+# Restaurar respaldo
+
+pg_restore -h bl-global.ct226au2o9dn.us-east-2.rds.amazonaws.com -p 5432 -U superadmin -d "bl_global" -v backup_bl_global20250827.dump
+
+NOTA: PARA QUE NO PIDA PASSWD, antes de ejecutar comando pg_dump, crear variable de sistema set PGPASSWORD=tu_password
