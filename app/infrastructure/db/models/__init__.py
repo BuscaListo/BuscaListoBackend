@@ -19,6 +19,7 @@ from .web_service_log import WebServiceLogORM
 from .price_history import PriceHistoryORM
 from .ad_statistics import AdStatisticsORM
 from .image import ImageORM
+from .image_categories import ImageCategoryORM
 from .currency import CurrencyORM
 
 # Modelos de base de datos con nombres en inglés
@@ -45,6 +46,7 @@ WebServiceLog = WebServiceLogORM
 PriceHistory = PriceHistoryORM
 AdStatistics = AdStatisticsORM
 Image = ImageORM
+ImageCategory = ImageCategoryORM
 Currency = CurrencyORM
 
 # Exportar todos los modelos
@@ -54,11 +56,11 @@ __all__ = [
     'CompanyORM', 'LocationORM', 'UserORM', 'StockORM', 'OfferORM',
     'AdvertisementORM', 'SubscriptionORM', 'UserSubscriptionORM', 'UserPermissionORM',
     'PermissionCatalogORM', 'WebServiceORM', 'WebServiceLogORM', 'PriceHistoryORM',
-    'AdStatisticsORM', 'ImageORM', 'CurrencyORM',
+    'AdStatisticsORM', 'ImageORM', 'CurrencyORM', 'ImageCategoryORM',
     
     # Alias para compatibilidad
     'Product', 'Category', 'SubCategory', 'Brand', 'Branch', 'Company', 'Location',
     'User', 'Stock', 'Offer', 'Advertisement', 'Subscription', 'UserSubscription',
     'UserPermission', 'PermissionCatalog', 'WebService', 'WebServiceLog', 'PriceHistory',
-    'AdStatistics', 'Image', 'Currency'
+    'AdStatistics', 'Image', 'Currency', 'ImageCategory'
 ]

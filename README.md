@@ -93,4 +93,7 @@
 
 * Funciones y utilidades compartidas.
 
----
+### Run Docker and Fast-Api (Local)
+
+* docker-compose up -d --build
+* uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
