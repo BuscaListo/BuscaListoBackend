@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from decimal import Decimal
 from typing import Optional
+from enum import Enum
 
 from pydantic import BaseModel
 
@@ -258,3 +259,19 @@ class CurrencyModel(BaseFromORM):
     created_at: Optional[datetime] = None
     created_by: Optional[str] = None
 
+
+class CurrencyResponse(BaseFromORM):
+    id: int
+    currency: str
+    price_bs: float
+    created_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    active: bool
+
+class CurrencyEnum(str, Enum):
+    euro = "euro"
+    yuan = "yuan"
+    lira = "lira"
+    rublo = "rublo"
+    dolar = "dolar"
+    
