@@ -5,7 +5,7 @@ import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.interfaces.api import product_router
-
+from app.interfaces.api import category_router
 PROJECT_NAME = os.getenv("PROJECT_NAME", "My FastAPI Project")
 VERSION = os.getenv("VERSION", "1.0.0")
 DESCRIPTION = os.getenv("DESCRIPTION", "Generic FastAPI Boilerplate API.")
@@ -45,7 +45,9 @@ async def root(request: Request):
         "public_ip": public_ip
     }
 
+# Include Routers Execute
 app.include_router(product_router.router)
+app.include_router(category_router.router)
 
 if __name__ == "__main__":
     uvicorn.run(
