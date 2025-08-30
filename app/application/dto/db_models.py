@@ -74,10 +74,12 @@ class BrandModel(BaseFromORM):
 class OfferModel(BaseFromORM):
     id: int
     description: str
-    percentage: Optional[Decimal] = None
+    discount_percent: Optional[Decimal] = None
     product_id: Optional[int] = None
     category_id: Optional[int] = None
     subcategory_id: Optional[int] = None
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
     created_at: Optional[datetime] = None
     created_by: Optional[str] = None
     active: bool

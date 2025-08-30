@@ -41,3 +41,4 @@ class ProductORM(Base):
     # Relaciones
     subcategory = relationship("SubCategoryORM", back_populates="products")
     images_rel = relationship("ImageORM", back_populates="product")
+    offer_product_relationship = relationship("OfferORM", back_populates="product_relationship")
