@@ -5,7 +5,17 @@ from sqlalchemy import func
 from app.infrastructure.db.models import ProductORM, ImageORM, BrandORM, SubCategoryORM
 
 
-def get_top3_recent_products_use_case(db: Session) -> List[ProductORM]:
+def get_top_recent_products_use_case(db: Session, items: int) -> List[ProductORM]:
+    """Get top n products from db 
+
+    Args:
+        db (Session): Db object for database connection
+        items (int): Number of items to get from query 
+
+    Returns:
+        List[ProductORM]: _description_
+    """
+    
     # Subconsulta para elegir una única imagen por producto (la de menor id)
     image_per_product_subq = (
         db.query(
@@ -29,7 +39,7 @@ def get_top3_recent_products_use_case(db: Session) -> List[ProductORM]:
         .outerjoin(image_per_product_subq, image_per_product_subq.c.id_producto == ProductORM.id)
         .outerjoin(ImageORM, ImageORM.id == image_per_product_subq.c.min_image_id)
         .order_by(ProductORM.created_at.desc())
-        .limit(3)
+        .limit(items)
         .all()
     )
     products: List[ProductORM] = []

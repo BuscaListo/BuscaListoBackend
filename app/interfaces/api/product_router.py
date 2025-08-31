@@ -17,8 +17,8 @@ from app.application.use_cases.list_products import list_products_use_case
 from app.application.use_cases.create_product import create_product_use_case
 from app.application.use_cases.update_product import update_product_use_case
 from app.application.use_cases.delete_product import delete_product_use_case
-from app.application.use_cases.get_top3_recent_products import (
-    get_top3_recent_products_use_case,
+from app.application.use_cases.get_top_recent_products import (
+    get_top_recent_products_use_case,
 )
 from app.application.use_cases.get_most_viewed_products import (
     get_most_viewed_products_use_case,
@@ -99,11 +99,11 @@ def delete_product(product_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/top/newest", response_model=List[RecentProductResponseDTO])
-def get_top3_recent_products(db: Session = Depends(get_db)):
+def get_top_recent_products(db: Session = Depends(get_db), items: int = 3):
     """
-    Get the top 3 most recent products.
+    Get the top n most recent products.
     """
-    products = get_top3_recent_products_use_case(db)
+    products = get_top_recent_products_use_case(db, items)
     for p in products:
         print(p.__dict__)
 
@@ -111,9 +111,9 @@ def get_top3_recent_products(db: Session = Depends(get_db)):
 
 
 @router.get("/top/most-viewed", response_model=List[RecentProductResponseDTO])
-def get_most_viewed_products(db: Session = Depends(get_db)):
+def get_most_viewed_products(db: Session = Depends(get_db), items: int = 5):
     """
-    Get the top 5 most viewed products.
+    Get the top n most viewed products.
     """
-    products = get_most_viewed_products_use_case(db)
+    products = get_most_viewed_products_use_case(db, items)
     return [RecentProductResponseDTO.model_validate(p) for p in products]

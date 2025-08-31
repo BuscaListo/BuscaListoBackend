@@ -2,10 +2,17 @@ from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
-from app.infrastructure.db.models import ProductORM, ImageORM, BrandORM, SubCategoryORM
+from app.infrastructure.db.models import (
+    ProductORM,
+    ImageORM,
+    BrandORM,
+    SubCategoryORM,
+)
 
 
-def get_most_viewed_products_use_case(db: Session) -> List[ProductORM]:
+def get_most_viewed_products_use_case(
+    db: Session, items: int
+) -> List[ProductORM]:
     # Subconsulta para elegir una única imagen por producto (la de menor id)
     image_per_product_subq = (
         db.query(
@@ -26,10 +33,15 @@ def get_most_viewed_products_use_case(db: Session) -> List[ProductORM]:
         )
         .join(BrandORM, BrandORM.id == ProductORM.brand_id)
         .join(SubCategoryORM, SubCategoryORM.id == ProductORM.subcategory_id)
-        .outerjoin(image_per_product_subq, image_per_product_subq.c.id_producto == ProductORM.id)
-        .outerjoin(ImageORM, ImageORM.id == image_per_product_subq.c.min_image_id)
+        .outerjoin(
+            image_per_product_subq,
+            image_per_product_subq.c.id_producto == ProductORM.id,
+        )
+        .outerjoin(
+            ImageORM, ImageORM.id == image_per_product_subq.c.min_image_id
+        )
         .order_by(ProductORM.views.desc())
-        .limit(5)
+        .limit(items)
         .all()
     )
 
@@ -40,5 +52,5 @@ def get_most_viewed_products_use_case(db: Session) -> List[ProductORM]:
         producto_orm.subcategory_name = subcategory_name
         producto_orm.image_url = image_url
         productos.append(producto_orm)
-    
+
     return productos
