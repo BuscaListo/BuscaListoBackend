@@ -12,6 +12,7 @@ from app.application.dto.product_dto import (
     ProductCreateDTO,
     ProductUpdateDTO,
 )
+from app.application.dto.offer_product_dto import OfferProductResponseDTO
 from app.application.use_cases.get_product import get_product_use_case
 from app.application.use_cases.list_products import list_products_use_case
 from app.application.use_cases.create_product import create_product_use_case
@@ -23,7 +24,12 @@ from app.application.use_cases.get_top_recent_products import (
 from app.application.use_cases.get_most_viewed_products import (
     get_most_viewed_products_use_case,
 )
+from app.application.use_cases.list_offer_products import (
+    list_offer_products_use_case,
+)
+
 from app.infrastructure.session import get_db
+
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
@@ -37,6 +43,21 @@ def list_products(db: Session = Depends(get_db)):
     for p in products:
         print(p.__dict__)
     return [ProductResponseDTO.model_validate(p) for p in products]
+
+
+@router.get("/deals", response_model=List[OfferProductResponseDTO])
+def list_offers_products_v2(db: Session = Depends(get_db)):
+    """
+    List all offers products.
+    """
+
+    offers_product = list_offer_products_use_case(db)
+    for offer in offers_product:
+        print(offer.__dict__)
+    return [
+        OfferProductResponseDTO.model_validate(offer)
+        for offer in offers_product
+    ]
 
 
 @router.get("/{product_id}", response_model=ProductResponseDTO)
