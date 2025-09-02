@@ -11,6 +11,7 @@ from app.application.dto.product_dto import (
     RecentProductResponseDTO,
     ProductCreateDTO,
     ProductUpdateDTO,
+    ProductDetailDTO,
 )
 from app.application.use_cases.get_product import get_product_use_case
 from app.application.use_cases.list_products import list_products_use_case
@@ -23,6 +24,7 @@ from app.application.use_cases.get_top3_recent_products import (
 from app.application.use_cases.get_most_viewed_products import (
     get_most_viewed_products_use_case,
 )
+from app.application.use_cases.get_product_detail import get_product_detail_use_case
 from app.infrastructure.session import get_db
 
 router = APIRouter(prefix="/products", tags=["Products"])
@@ -49,6 +51,26 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Product not found")
 
     return ProductResponseDTO.model_validate(product)
+
+
+@router.get("/{product_id}/detail", response_model=ProductDetailDTO)
+def get_product_detail(product_id: int, db: Session = Depends(get_db)):
+    """
+    Get detailed information of a specific product by ID including all related data.
+    This endpoint returns comprehensive product information including:
+    - Product details
+    - Brand information
+    - Category and subcategory
+    - Company/supplier information
+    - Images
+    - Offers
+    - Mock comments
+    """
+    product_detail = get_product_detail_use_case(db, product_id)
+    if not product_detail:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    return product_detail
 
 
 @router.post("/", response_model=ProductResponseDTO, status_code=201)

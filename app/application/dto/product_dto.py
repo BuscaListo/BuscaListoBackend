@@ -1,64 +1,42 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel
 
 
-class ProductResponseDTO(BaseModel):
+class BaseProduct(BaseModel):
+    """Clase base con campos comunes de productos"""
     id: int
     name: str
-    brand_id: int
+    brand_id: Optional[int]
     price_bs: float
-    subcategory_id: int
     price_usd: Optional[float]
+    subcategory_id: Optional[int]
     in_stock: Optional[int]
     branch_id: Optional[int]
     active: bool
     views: int
     created_at: datetime
-    # Campos que a veces no están:
+
+    class Config:
+        from_attributes = True
+
+
+class ProductResponseDTO(BaseProduct):
+    # Campos adicionales específicos para este DTO
     image_url: Optional[str] = None
     offer_description: Optional[str] = ""
 
-    class Config:
-        from_attributes = True
 
-
-class RecentProductResponseDTO(BaseModel):
-    id: int
-    name: str
+class RecentProductResponseDTO(BaseProduct):
+    # Campos adicionales específicos para este DTO
     brand_name: str  # nombre de la marca
-    price_bs: float
     subcategory_name: str
-    price_usd: Optional[float]
-    in_stock: Optional[int]
     offer_description: Optional[str] = ""
-    branch_id: Optional[int]
-    active: bool
-    views: int
     image_url: Optional[str]
-    created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
-class ProductCreateDTO(BaseModel):
-    name: str
-    description: Optional[str] = None
-    price_bs: float
-    price_usd: Optional[float] = None
-    images: Optional[str] = None
-    code: Optional[str] = None
-    in_stock: Optional[int] = None
-    subcategory_id: int
-    branch_id: int
-    brand_id: int
-    created_by: Optional[str] = None
-    features: Optional[str] = None
-    advanced_features: Optional[str] = None
-
-
-class ProductUpdateDTO(BaseModel):
+class BaseProductCreateUpdate(BaseModel):
+    """Clase base para creación y actualización de productos"""
     name: Optional[str] = None
     description: Optional[str] = None
     price_bs: Optional[float] = None
@@ -69,6 +47,90 @@ class ProductUpdateDTO(BaseModel):
     subcategory_id: Optional[int] = None
     branch_id: Optional[int] = None
     brand_id: Optional[int] = None
-    created_at: Optional[datetime] = None
     features: Optional[str] = None
     advanced_features: Optional[str] = None
+
+
+class ProductCreateDTO(BaseProductCreateUpdate):
+    """DTO para crear productos - campos requeridos"""
+    name: str 
+    price_bs: float 
+    subcategory_id: int  
+    branch_id: int 
+    brand_id: int 
+    created_by: Optional[str] = None
+
+
+class ProductUpdateDTO(BaseProductCreateUpdate):
+    """DTO para actualizar productos - todos los campos opcionales"""
+    created_at: Optional[datetime] = None
+
+
+class MockCommentDTO(BaseModel):
+    id: int
+    product_id: int
+    user_name: str
+    user_avatar: str
+    rating: int
+    comment: str
+    created_at: str
+    helpful_votes: int
+    is_verified_purchase: bool
+
+
+class ProductInfoDTO(BaseProduct):
+    """Información básica del producto"""
+    code: Optional[str] = None
+    brand_name: Optional[str] = None
+    subcategory_name: Optional[str] = None
+    category: Optional[str] = None
+    imagenes: List[str] = []
+    characteristics: Optional[str] = None
+    advancedCharacteristics: Optional[str] = None
+    accessories: Optional[str] = None
+    highlightedFeatures: Optional[str] = None
+    pros: Optional[str] = None
+    cons: Optional[str] = None
+
+
+class PricingDTO(BaseModel):
+    """Información de precios y ofertas"""
+    price_bs: float
+    price_usd: Optional[float]
+    price_offer_usd: Optional[float]
+    price_offer_bs: Optional[float]
+    discount_percent: Optional[float]
+    offer_description: Optional[str]
+
+
+class CompanyDTO(BaseModel):
+    """Información del proveedor/sucursal"""
+    supplier_id: Optional[int]
+    supplier_name: str
+    supplier_branch: Optional[str]
+    supplier_address: Optional[str]
+    supplier_phone: Optional[str]
+    supplier_email: Optional[str]
+    supplier_website: Optional[str]
+    supplier_hours: Optional[str]
+    supplier_rating: Optional[float]
+    supplier_reviews: Optional[int]
+
+
+class MetaDTO(BaseModel):
+    """Metadatos del producto"""
+    views: int
+    created_at: datetime
+    url: str
+    mockComments: List[MockCommentDTO]
+
+
+class ProductDetailDTO(BaseModel):
+    """DTO principal que agrupa toda la información del producto"""
+    product: ProductInfoDTO
+    pricing: PricingDTO
+    company: CompanyDTO
+    meta: MetaDTO
+
+    class Config:
+        from_attributes = True
