@@ -19,6 +19,7 @@ from app.application.use_cases.list_products import list_products_use_case
 from app.application.use_cases.create_product import create_product_use_case
 from app.application.use_cases.update_product import update_product_use_case
 from app.application.use_cases.delete_product import delete_product_use_case
+from app.application.use_cases.get_product_detail import get_product_detail_use_case
 from app.application.use_cases.get_top_recent_products import (
     get_top_recent_products_use_case,
 )
