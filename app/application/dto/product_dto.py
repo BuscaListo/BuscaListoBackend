@@ -141,3 +141,48 @@ class ProductDetailDTO(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class SearchResultDTO(BaseModel):
+    """DTO para resultados de búsqueda"""
+    id: int
+    name: str
+    brand_name: Optional[str] = None
+    price_bs: float
+    price_usd: Optional[float] = None
+    image_url: Optional[str] = None
+    subcategory_name: Optional[str] = None
+    category_name: Optional[str] = None
+    company_name: Optional[str] = None
+    views: int
+    created_at: datetime
+    in_stock: Optional[int] = None
+    offer_description: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
+class SearchResponseDTO(BaseModel):
+    """DTO para respuesta completa de búsqueda"""
+    products: List[SearchResultDTO]
+    total: int
+    page: int
+    limit: int
+    total_pages: int
+    search_term: str
+    category: Optional[str] = None
+    sort_by: str
+    sort_order: str
+
+    class Config:
+        from_attributes = True
+
+
+class SearchSuggestionsDTO(BaseModel):
+    """DTO para sugerencias de búsqueda"""
+    suggestions: List[str]
+    search_term: str
+
+    class Config:
+        from_attributes = True
