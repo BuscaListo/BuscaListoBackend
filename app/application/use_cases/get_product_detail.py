@@ -70,6 +70,9 @@ def get_product_detail_use_case(db: Session, product_id: int) -> Optional[Produc
 
     product_url = f"https://buscalisto.com/product/{product_id}"
     mock_comments = []
+    # Updtae views count
+    product.views = (product.views or 0) + 1
+    db.commit()
 
     product_info = ProductInfoDTO(
         id=product.id,
@@ -131,5 +134,5 @@ def get_product_detail_use_case(db: Session, product_id: int) -> Optional[Produc
         company=company_info,
         meta=meta_info
     )
-
+    
     return product_detail
