@@ -19,6 +19,7 @@ class ProductSearchResult(NamedTuple):
     subcategory_name: str
     category_name: str
     company_name: str
+    branch_name: str
 
 
 def search_products_use_case(
@@ -58,7 +59,8 @@ def search_products_use_case(
         BrandORM.name.label('brand_name'),
         SubCategoryORM.name.label('subcategory_name'),
         CategoryORM.name.label('category_name'),
-        CompanyORM.name.label('company_name')
+        CompanyORM.name.label('company_name'),
+        BranchORM.name.label('branch_name')
     ).join(
         BrandORM, ProductORM.brand_id == BrandORM.id
     ).join(
@@ -147,7 +149,8 @@ def search_products_use_case(
             brand_name=result[1] or "",  # brand_name
             subcategory_name=result[2] or "",  # subcategory_name
             category_name=result[3] or "",  # category_name
-            company_name=result[4] or ""  # company_name
+            company_name=result[4] or "",  # company_name
+            branch_name=result[5] or ""  # branch_name
         )
         products.append(product_result)
     

@@ -143,6 +143,7 @@ def search_products(
         subcategory_name = product_result.subcategory_name
         category_name = product_result.category_name
         company_name = product_result.company_name
+        branch_name = product_result.branch_name
         
         # Construir URL de imagen (usar la primera imagen si existe)
         image_url = None
@@ -162,6 +163,7 @@ def search_products(
             "subcategory_name": subcategory_name,
             "category_name": category_name,
             "company_name": company_name,
+            "branch_name": branch_name,
             "views": product.views,
             "created_at": product.created_at,
             "in_stock": product.in_stock,

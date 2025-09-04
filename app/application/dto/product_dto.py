@@ -153,6 +153,7 @@ class SearchResultDTO(BaseModel):
     image_url: Optional[str] = None
     subcategory_name: Optional[str] = None
     category_name: Optional[str] = None
+    branch_name: Optional[str] = None
     company_name: Optional[str] = None
     views: int
     created_at: datetime
