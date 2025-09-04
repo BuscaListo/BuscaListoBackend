@@ -3,9 +3,9 @@ Router de productos refactorizado para usar alias en inglés.
 Este es el router original pero usando los nuevos alias y mapeadores.
 """
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 from app.application.dto.product_dto import (
     ProductResponseDTO,
     RecentProductResponseDTO,
@@ -28,6 +28,9 @@ from app.application.use_cases.get_most_viewed_products import (
 )
 from app.application.use_cases.list_offer_products import (
     list_offer_products_use_case,
+)
+from app.application.use_cases.get_products_by_company import (
+    get_products_by_company_use_case,
 )
 
 from app.infrastructure.session import get_db
@@ -160,3 +163,30 @@ def get_most_viewed_products(db: Session = Depends(get_db), items: int = 5):
     """
     products = get_most_viewed_products_use_case(db, items)
     return [RecentProductResponseDTO.model_validate(p) for p in products]
+
+
+@router.get("/company/{company_name}", response_model=List[ProductResponseDTO])
+def get_products_by_company(
+    company_name: str,
+    category_id: Optional[int] = Query(None, description="ID de la categoría para filtrar"),
+    db: Session = Depends(get_db)
+):
+    """
+    Obtiene todos los productos de una empresa específica.
+    
+    Args:
+        company_name: Nombre de la empresa
+        category_id: ID de la categoría para filtrar (opcional)
+    
+    Returns:
+        Lista de productos de la empresa
+    """
+    products = get_products_by_company_use_case(db, company_name, category_id)
+    
+    if not products:
+        raise HTTPException(
+            status_code=404, 
+            detail=f"No se encontraron productos para la empresa '{company_name}'"
+        )
+    
+    return [ProductResponseDTO.model_validate(p) for p in products]

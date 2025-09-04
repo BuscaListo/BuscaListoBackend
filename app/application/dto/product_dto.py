@@ -25,6 +25,13 @@ class ProductResponseDTO(BaseProduct):
     # Campos adicionales específicos para este DTO
     image_url: Optional[str] = None
     offer_description: Optional[str] = ""
+    brand_name: Optional[str] = None
+    subcategory_name: Optional[str] = None
+    category_name: Optional[str] = None
+    category_key: Optional[str] = None
+    category_id: Optional[int] = None
+    company_name: Optional[str] = None
+    branch_name: Optional[str] = None
 
 
 class RecentProductResponseDTO(BaseProduct):
