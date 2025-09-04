@@ -144,14 +144,7 @@ def search_products(
         category_name = product_result.category_name
         company_name = product_result.company_name
         branch_name = product_result.branch_name
-        
-        # Construir URL de imagen (usar la primera imagen si existe)
-        image_url = None
-        if product.images:
-            # Asumir que las imágenes están separadas por comas
-            image_urls = product.images.split(',')
-            if image_urls:
-                image_url = image_urls[0].strip()
+        image_url = product_result.image_url
         
         product_dto = {
             "id": product.id,

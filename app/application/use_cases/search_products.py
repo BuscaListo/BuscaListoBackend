@@ -11,6 +11,7 @@ from app.infrastructure.db.models.subcategory import SubCategoryORM
 from app.infrastructure.db.models.category import CategoryORM
 from app.infrastructure.db.models.branch import BranchORM
 from app.infrastructure.db.models.company import CompanyORM
+from app.infrastructure.db.models.image import ImageORM
 
 
 class ProductSearchResult(NamedTuple):
@@ -20,6 +21,7 @@ class ProductSearchResult(NamedTuple):
     category_name: str
     company_name: str
     branch_name: str
+    image_url: str
 
 
 def search_products_use_case(
@@ -53,6 +55,16 @@ def search_products_use_case(
     
     search_term = search_term.strip()
     
+    # Subconsulta para elegir una única imagen por producto (la de menor id)
+    image_per_product_subq = (
+        db.query(
+            ImageORM.product_id.label("id_producto"),
+            func.min(ImageORM.id).label("min_image_id"),
+        )
+        .group_by(ImageORM.product_id)
+        .subquery()
+    )
+    
     # Construir query base con joins para búsqueda - retornar todos los datos necesarios
     query = db.query(
         ProductORM,
@@ -60,7 +72,8 @@ def search_products_use_case(
         SubCategoryORM.name.label('subcategory_name'),
         CategoryORM.name.label('category_name'),
         CompanyORM.name.label('company_name'),
-        BranchORM.name.label('branch_name')
+        BranchORM.name.label('branch_name'),
+        ImageORM.url.label('image_url')
     ).join(
         BrandORM, ProductORM.brand_id == BrandORM.id
     ).join(
@@ -71,6 +84,13 @@ def search_products_use_case(
         BranchORM, ProductORM.branch_id == BranchORM.id
     ).join(
         CompanyORM, BranchORM.company_id == CompanyORM.id
+    ).join(
+        image_per_product_subq, ProductORM.id == image_per_product_subq.c.id_producto
+    ).join(
+        ImageORM, and_(
+            ImageORM.product_id == ProductORM.id,
+            ImageORM.id == image_per_product_subq.c.min_image_id
+        )
     )
     
     # Construir condiciones de búsqueda
@@ -150,7 +170,8 @@ def search_products_use_case(
             subcategory_name=result[2] or "",  # subcategory_name
             category_name=result[3] or "",  # category_name
             company_name=result[4] or "",  # company_name
-            branch_name=result[5] or ""  # branch_name
+            branch_name=result[5] or "",  # branch_name
+            image_url=result[6] or ""  # image_url
         )
         products.append(product_result)
     
