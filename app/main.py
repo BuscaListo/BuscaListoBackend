@@ -4,6 +4,7 @@ import socket
 import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from app.interfaces.api import product_router, bcv_router, category_router, offer_router, company_router
 PROJECT_NAME = os.getenv("PROJECT_NAME", "My FastAPI Project")
 VERSION = os.getenv("VERSION", "1.0.0")
@@ -21,6 +22,12 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+# Add trusted host middleware for proxy headers
+app.add_middleware(
+    TrustedHostMiddleware, 
+    allowed_hosts=["*"]
 )
 @app.get("/")
 async def root(request: Request):
@@ -92,5 +99,7 @@ if __name__ == "__main__":
             "*/.idea/*"
         ],
         reload_delay=1,
-        reload_includes=["*.py", "*.html", "*.css", "*.js"]
+        reload_includes=["*.py", "*.html", "*.css", "*.js"],
+        proxy_headers=True,
+        forwarded_allow_ips="*"
     )
