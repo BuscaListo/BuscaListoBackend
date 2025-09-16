@@ -70,10 +70,22 @@ def list_companies_use_case(db: Session) -> List[CompanyORM]:
     # Procesar resultados
     companies: List[CompanyORM] = []
     for company_orm, location_name, branches_count, products_count in rows:
-        # Asignar valores adicionales al objeto CompanyORM
-        company_orm.location_name = location_name
-        company_orm.branches_count = branches_count
-        company_orm.products_count = products_count
-        companies.append(company_orm)
+        # Crear un nuevo objeto con los atributos adicionales
+        company_data = CompanyORM()
+        company_data.id = company_orm.id
+        company_data.name = company_orm.name
+        company_data.phone = company_orm.phone
+        company_data.logo = company_orm.logo
+        company_data.location_id = company_orm.location_id
+        company_data.created_at = company_orm.created_at
+        company_data.created_by = company_orm.created_by
+        company_data.active = company_orm.active
+        
+        # Asignar valores adicionales
+        company_data.location_name = location_name
+        company_data.branches_count = branches_count
+        company_data.products_count = products_count
+        
+        companies.append(company_data)
     
     return companies
