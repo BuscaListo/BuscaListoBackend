@@ -21,6 +21,4 @@ def list_categories(db: Session = Depends(get_db)):
     List all categories.
     """
     categories = list_categories_use_case(db)
-    for c in categories:
-        print(c)
     return [CategoryResponseDTO.model_validate(c) for c in categories]

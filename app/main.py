@@ -39,6 +39,7 @@ async def root(request: Request):
         "version": VERSION,
         "status": "running",
         "db_type": os.getenv("DB_TYPE", "sqlite"),
+        "Name_db": os.getenv("NAMEDB", "Undefined"),
         "client_ip": client_host,
         "server_ip": server_ip,
         "public_ip": public_ip
@@ -61,6 +62,7 @@ async def api_root(request: Request):
         "version": VERSION,
         "status": "running",
         "db_type": os.getenv("DB_TYPE", "sqlite"),
+        "Name_db": os.getenv("NAMEDB", "Undefined"),
         "client_ip": client_host,
         "server_ip": server_ip,
         "public_ip": public_ip,
