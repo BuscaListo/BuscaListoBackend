@@ -48,28 +48,31 @@ class BaseProductCreateUpdate(BaseModel):
     description: Optional[str] = None
     price_bs: Optional[float] = None
     price_usd: Optional[float] = None
-    images: Optional[str] = None
+    images: List[str] = []
     code: Optional[str] = None
-    in_stock: Optional[int] = None
-    subcategory_id: Optional[int] = None
-    branch_id: Optional[int] = None
-    brand_id: Optional[int] = None
-    features: Optional[str] = None
-    advanced_features: Optional[str] = None
+    in_stock: Optional[int] = 0
+    features: Optional[str] = '[{}]'
+    advanced_features: Optional[str] = '[{}]'
 
 
 class ProductCreateDTO(BaseProductCreateUpdate):
     """DTO para crear productos - campos requeridos"""
-    name: str 
-    price_bs: float 
-    subcategory_id: int  
-    branch_id: int 
-    brand_id: int 
-    created_by: Optional[str] = None
-
+    name:           str 
+    description:    str
+    price_usd:      float
+    in_stock:       int
+    code:           str
+    images:         list[str]
+    subcategory:    str
+    branch:         str
+    brand:          str
+    created_by:     Optional[str] = None
 
 class ProductUpdateDTO(BaseProductCreateUpdate):
     """DTO para actualizar productos - todos los campos opcionales"""
+    subcategory_id: Optional[int] = None
+    branch_id: Optional[int] = None
+    brand_id: Optional[int] = None
     created_at: Optional[datetime] = None
 
 
