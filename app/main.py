@@ -2,9 +2,10 @@ import os
 import httpx
 import socket
 import uvicorn
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from app.interfaces.api import product_router, bcv_router, category_router, offer_router, company_router
 PROJECT_NAME = os.getenv("PROJECT_NAME", "My FastAPI Project")
 VERSION = os.getenv("VERSION", "1.0.0")
@@ -14,6 +15,7 @@ app = FastAPI(
     title=PROJECT_NAME,
     version=VERSION,
     description=DESCRIPTION,
+    root_path="",  # Para manejar correctamente los redirects
 )
 
 app.add_middleware(
@@ -29,6 +31,21 @@ app.add_middleware(
     TrustedHostMiddleware, 
     allowed_hosts=["*"]
 )
+
+# Custom middleware to force HTTPS in redirects
+class ForceHTTPSMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        
+        # Si es un redirect 307, cambiar http por https en la location
+        if response.status_code == 307 and "location" in response.headers:
+            location = response.headers["location"]
+            if location.startswith("http://"):
+                response.headers["location"] = location.replace("http://", "https://")
+        
+        return response
+
+app.add_middleware(ForceHTTPSMiddleware)
 @app.get("/")
 async def root(request: Request):
     """
