@@ -7,9 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from app.interfaces.api import product_router, bcv_router, category_router, offer_router, company_router
-PROJECT_NAME = os.getenv("PROJECT_NAME", "My FastAPI Project")
-VERSION = os.getenv("VERSION", "1.0.0")
-DESCRIPTION = os.getenv("DESCRIPTION", "Generic FastAPI Boilerplate API.")
+from app.infrastructure.config.constants import PROJECT_NAME, VERSION, DESCRIPTION, ALLOW_ORIGINS, DB_TYPE, HOST, PORT, RELOAD, NAMEDB
 
 app = FastAPI(
     title=PROJECT_NAME,
@@ -20,7 +18,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.getenv("CORS_ALLOW_ORIGINS", "*").split(","),
+    allow_origins=ALLOW_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -62,8 +60,8 @@ async def root(request: Request):
         "project": PROJECT_NAME,
         "version": VERSION,
         "status": "running",
-        "db_type": os.getenv("DB_TYPE", "sqlite"),
-        "Name_db": os.getenv("NAMEDB", "Undefined"),
+        "db_type": DB_TYPE,
+        "Name_db": NAMEDB,
         "client_ip": client_host,
         "server_ip": server_ip,
         "public_ip": public_ip
@@ -103,9 +101,9 @@ app.include_router(company_router.router, prefix="/api")
 if __name__ == "__main__":
     uvicorn.run(
         "app.main:app",
-        host=os.getenv("HOST", "0.0.0.0"),
-        port=int(os.getenv("PORT", 8000)),
-        reload = os.getenv("RELOAD", "1") == "1",
+        host=HOST,
+        port=PORT,
+        reload = RELOAD,
         reload_dirs=[os.path.dirname(os.path.abspath(__file__))],
         reload_excludes=[
             "*/.git/*",

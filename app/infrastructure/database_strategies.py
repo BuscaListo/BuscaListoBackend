@@ -13,7 +13,7 @@ from app.infrastructure.error_handlers import (
     retry_with_backoff,
     RetryConfig,
 )
-
+from app.infrastructure.config.constants import MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, MYSQL_PORT, MYSQL_DATABASE
 class DatabaseStrategy(ABC):
     def __init__(self, logger: logging.Logger = None):
         self.logger = logger or logging.getLogger(__name__)
@@ -185,11 +185,11 @@ class MySQLStrategy(DatabaseStrategy):
     def get_connection_string(self) -> str:
         """Construye la cadena de conexión para MySQL con validación"""
         try:
-            user = os.getenv("MYSQL_USER", "root")
-            password = os.getenv("MYSQL_PASSWORD", "")
-            host = os.getenv("MYSQL_HOST", "localhost")
-            port = os.getenv("MYSQL_PORT", "3306")
-            database = os.getenv("MYSQL_DATABASE", "database_mysql")
+            user = MYSQL_USER
+            password = MYSQL_PASSWORD
+            host = MYSQL_HOST
+            port = MYSQL_PORT
+            database = MYSQL_DATABASE
 
             # Validar parámetros críticos
             if not user:

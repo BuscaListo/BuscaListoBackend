@@ -5,8 +5,8 @@ Provee la dependencia `get_db` para FastAPI.
 
 import os
 from app.infrastructure.database_strategies import DatabaseStrategyFactory
+from app.infrastructure.config.constants import DB_TYPE
 
-DB_TYPE = os.getenv("DB_TYPE", "sqlite")
 
 db_strategy = DatabaseStrategyFactory.create_strategy(db_type=DB_TYPE)
 

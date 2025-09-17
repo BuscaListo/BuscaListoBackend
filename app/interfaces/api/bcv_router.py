@@ -55,6 +55,7 @@ async def get_currencies(db: Session = Depends(get_db)):
     """
     from app.infrastructure.db.models.currency import CurrencyORM
     currencies = db.query(CurrencyORM).filter(CurrencyORM.active == True).all()
+    print("currencies",currencies)
     return currencies
 
 
