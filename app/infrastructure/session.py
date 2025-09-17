@@ -7,6 +7,7 @@ import os
 from app.infrastructure.database_strategies import DatabaseStrategyFactory
 from app.infrastructure.config.constants import DB_TYPE
 
+
 db_strategy = DatabaseStrategyFactory.create_strategy(db_type=DB_TYPE)
 
 SessionLocal = db_strategy.get_session

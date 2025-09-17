@@ -28,11 +28,13 @@ def list_categories_use_case(db: Session) -> List[CategoryORM]:
             image.url for image in images_orm if image.category_id == category.id
         ]
 
-        categories_response.append({
-            "id": category.id,
-            "name": category.name,
-            "description": category.description,
-            "image_urls": image_urls,
-            "key": slugify(category.name),
-        })
+        # Crear un objeto que tenga los atributos necesarios
+        category_data = CategoryORM()
+        category_data.id = category.id
+        category_data.name = category.name
+        category_data.description = category.description
+        category_data.image_urls = image_urls
+        category_data.key = slugify(category.name)
+        
+        categories_response.append(category_data)
     return categories_response
