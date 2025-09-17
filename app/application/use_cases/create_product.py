@@ -118,15 +118,15 @@ def create_product_use_case(db: Session, product_data: ProductCreateDTO) -> Prod
         )
     # Get currency USD
     print("Precio producto enviado:",price_product_usd)
-    price_bs_by_usd  = db.query(CurrencyORM.price_bs).filter(CurrencyORM.currency == 'USD').first()
+    price_bs_by_usd  = db.query(CurrencyORM.price_bs).filter(CurrencyORM.currency == 'dolar').first()[0]
     all_currencies = db.query(CurrencyORM).all()
-    import pdb
+    #import pdb
     from sqlalchemy import text
     result = db.execute(text("SELECT * FROM moneda"))
     rows = result.fetchall()
     print("Registros SQL directo:", len(rows))
 
-    pdb.set_trace()
+    #pdb.set_trace()
     for currency in all_currencies:
         print(f"ID: {currency.id}, Currency: '{currency.currency}', Price: {currency.price_bs}")
 

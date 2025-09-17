@@ -4,13 +4,8 @@ Provee la dependencia `get_db` para FastAPI.
 """
 
 import os
-from dotenv import load_dotenv
 from app.infrastructure.database_strategies import DatabaseStrategyFactory
-
-# Carga las variables del archivo .env
-load_dotenv()
-
-DB_TYPE = os.getenv("DB", "sqlite")
+from app.infrastructure.config.constants import DB_TYPE
 
 db_strategy = DatabaseStrategyFactory.create_strategy(db_type=DB_TYPE)
 
