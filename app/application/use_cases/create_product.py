@@ -1,8 +1,10 @@
+import json
 from sqlalchemy import func
 from datetime import datetime
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
-from app.infrastructure.db.models import ProductORM,SubCategoryORM,BranchORM,BrandORM,CurrencyORM
+from app.infrastructure.db.models import ProductORM,SubCategoryORM,BranchORM,BrandORM,CurrencyORM\
+    ,ImageORM
 from app.application.dto.product_dto import ProductCreateDTO
 
 
@@ -103,6 +105,24 @@ def create_product_use_case(db: Session, product_data: ProductCreateDTO) -> Prod
         model_ORM=BrandORM
     )
     ##########################
+    # Verificar duplicado
+    ##########################
+    product_query = db.query(ProductORM).filter(
+        ProductORM.active == 1,
+        ProductORM.subcategory_id == sub_category_out,
+        ProductORM.branch_id == branch_out,
+        ProductORM.brand_id == brand_out,
+        func.lower(ProductORM.name) == str(product_data.name).lower()
+    ).first()
+    if product_query is not None:
+        key = 'Nombre:'+product_query.name+'-IdSubCat:'+str(sub_category_out)+'-IdBranch:'+str(branch_out)\
+            +'-IdBrand:'+str(brand_out)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail= f'Producto ya existe key:({key})'
+        )
+        
+    ##########################
     # Convert USD->BS
     ##########################
     print(5*"=")
@@ -118,17 +138,11 @@ def create_product_use_case(db: Session, product_data: ProductCreateDTO) -> Prod
         )
     # Get currency USD
     print("Precio producto enviado:",price_product_usd)
-    price_bs_by_usd  = db.query(CurrencyORM.price_bs).filter(CurrencyORM.currency == 'dolar').first()[0]
-    all_currencies = db.query(CurrencyORM).all()
-    #import pdb
-    from sqlalchemy import text
-    result = db.execute(text("SELECT * FROM moneda"))
-    rows = result.fetchall()
-    print("Registros SQL directo:", len(rows))
-
-    #pdb.set_trace()
-    for currency in all_currencies:
-        print(f"ID: {currency.id}, Currency: '{currency.currency}', Price: {currency.price_bs}")
+    try:
+        price_bs_by_usd  = db.query(CurrencyORM.price_bs).filter(CurrencyORM.currency == 'dolar').first()[0]
+    except:
+        price_bs_by_usd = 0
+        print("[WARNING] No fue posible capturar tasa dolar en tabla moneda")
 
     print("Tasa USD -> BS obtenida:",price_bs_by_usd)
     try:
@@ -141,14 +155,68 @@ def create_product_use_case(db: Session, product_data: ProductCreateDTO) -> Prod
 
     print("Obtenido precio bs:",price_product_bs)
     print(5*"=")
+    # ##############################
+    # VALIDAR INPUT IMAGES Y OBTENER 1 VALOR
+    # ##############################
+    print("OBTENIENDO IMAGEN DEL PRODUCTO")
+    image_url = ''
+    images    = []
+    list_images_in = product_data.images
+    print("Valor Input images:",product_data.images)
+    try:
+        print("Json image obtenido:",list_images_in)
+        if isinstance(list_images_in,list):
+            print("Valor images interpretado correctamente (List)")
+            if len(list_images_in)>0:
+                image_url = list_images_in[0]
+                images    = list_images_in
+            else:
+                print("Imagenes producto vacias")
+        else:
+            print("[WARNING] Input image no es una lista. No se captura imagen del producto")
+    except Exception as err:
+        print("[ERROR] No se capturo input image correctamente")
+    print("Imagen producto obtenida:",image_url)
+    print("Lista imagenes producto obtenida:",images)
+    print(5*"=")
 
+    # ############################################################
+    # VALIDAR INPUT CARACTERISTICAS Y CARACTERISTICAS AVANZADAS
+    # ############################################################
+    print("VALIDANDO CARACTERISTICAS DEL PRODUCTO")
+    product_features = '[]'
+    features_in      = product_data.features
+    print("Valor input features:",features_in)
+    try:
+        if not isinstance(features_in,list):
+            print("[WARNING] Caracteristicas del producto no es una lista (JSON)")
+        else:
+            product_features = json.dumps(features_in)
+    except Exception as err:
+        print("[ERROR] Caracteristicas del producto en formato incorrecto:",err)
+    print("VALIDANDO CARACTERISTICAS AVANZADAS DEL PRODUCTO")
+    product_ft_avanc = '[]'
+    features_avanc_in      = product_data.advanced_features
+    print("Valor input advanced features:",features_avanc_in)
+    try:
+        if not isinstance(features_avanc_in,list):
+            print("[WARNING] Caracteristicas avanzadas del producto no es una lista (JSON)")
+        else:
+            product_ft_avanc = json.dumps(features_avanc_in)
+    except Exception as err:
+        print("[ERROR] Caracteristicas del producto en formato incorrecto:",err)
+
+    print("Caracteristicas de producto obtenida:",product_features)
+    print("Caracteristicas Avanzadas de producto obtenida:",product_ft_avanc)
+
+    print(5*"=")
     print("Data: OK")
     nuevo_producto = ProductORM(
         name              = product_data.name,
         description       = product_data.description,
         price_bs          = price_product_bs,
         price_usd         = price_product_usd,
-        images            = product_data.images,
+        images            = image_url,
         code              = product_data.code,
         in_stock          = product_data.in_stock if product_data.in_stock is not None else 1,
         subcategory_id    = sub_category_out,
@@ -156,21 +224,38 @@ def create_product_use_case(db: Session, product_data: ProductCreateDTO) -> Prod
         brand_id          = brand_out,
         created_at        = datetime.utcnow(),
         created_by        = product_data.created_by,
-        features          = product_data.features,
-        advanced_features = product_data.advanced_features,
+        features          = product_features,
+        advanced_features = product_ft_avanc,
         active            = 1
     )
 
-    #db.add(nuevo_producto)
-    #db.commit()
-    #db.refresh(nuevo_producto)
-
+    db.add(nuevo_producto)
+    db.commit()
+    db.refresh(nuevo_producto)
+    # #############################
+    # Obtener id producto insertado
+    # #############################
+    id_product_inserted = nuevo_producto.id
+    print(5*"=")
+    print(f"Producto insertado correctamente con ID: {id_product_inserted}")
+    print("Insercion: OK")
     ##########################
     # INSERT IMAGES-PRODUCTS
     ##########################
     print(5*"=")
     print("INSERTANDO IMAGENES DEL PRODUCTO")
     print(5*"=")
+    if images:
+        for img_url in images:
+            nueva_imagen = ImageORM(
+                product_id=id_product_inserted,  # ← Usamos el ID aquí
+                url=img_url,
+                created_at=datetime.utcnow(),
+                created_by=product_data.created_by
+            )
+            db.add(nueva_imagen)
+        
+        db.commit()
+        
 
     return nuevo_producto
-

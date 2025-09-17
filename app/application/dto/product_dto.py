@@ -51,8 +51,8 @@ class BaseProductCreateUpdate(BaseModel):
     images: List[str] = []
     code: Optional[str] = None
     in_stock: Optional[int] = 0
-    features: Optional[str] = '[{}]'
-    advanced_features: Optional[str] = '[{}]'
+    features: Optional[List[str]] = [""]
+    advanced_features: Optional[List[str]] = [""]
 
 
 class ProductCreateDTO(BaseProductCreateUpdate):
